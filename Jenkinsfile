@@ -11,30 +11,37 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
-            steps {
-                bat 'python -m pip install -r requirements.txt'
-            }
-        }
-
-        stage('Train Model') {
+        stage('Train ML Model') {
             steps {
                 bat 'python train_model.py'
             }
         }
 
-        stage('Start FastAPI') {
+        stage('Build Docker Image') {
             steps {
-                bat '''
-                start "" cmd /c "cd /d C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\IrisDataset1 && python -m uvicorn app:app --host 127.0.0.1 --port 8091"
-                '''
+                bat 'docker build -t fastapi-ml-app .'
             }
         }
 
-        stage('Done') {
+        stage('Stop Old Container') {
             steps {
-                bat 'echo FastAPI Started on http://127.0.0.1:8091'
+                bat 'docker stop fastapi-container || exit 0'
+                bat 'docker rm fastapi-container || exit 0'
             }
         }
+
+        stage('Run Docker Container') {
+            steps {
+                bat 'docker run -d -p 8082:8000 --name fastapi-container fastapi-ml-app'
+            }
+        }
+
+        stage('Display Application URL') {
+            steps {
+                bat 'echo Application running at http://localhost:8082'
+                bat 'echo Swagger UI at http://localhost:8082/docs'
+            }
+        }
+
     }
 }
