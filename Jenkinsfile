@@ -28,8 +28,8 @@ pipeline {
         
         stage('Display Application URL') {
             steps {
-                bat 'echo Application running at http://localhost:8082'
-                bat 'echo Swagger UI at http://localhost:8082/docs'
+                bat 'echo Application running at http://localhost:8091'
+                bat 'echo Swagger UI at http://localhost:8091/docs'
             }
         }
 
