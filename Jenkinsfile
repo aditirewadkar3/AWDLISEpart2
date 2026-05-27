@@ -7,16 +7,17 @@ pipeline {
         stage('Clone Repository') {
             steps {
                 git branch: 'main',
-                url: 'https://github.com/mohinideshmukh765/Heart_Prediction.git'
+                url: 'https://github.com/aditirewadkar3/AWDLISEpart2.git'
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Train ML Model') {
             steps {
-                bat 'docker build -t fastapi-ml-app .'
+                bat 'python train_model.py'
             }
         }
 
+       
         stage('Stop Old Container') {
             steps {
                 bat 'docker stop fastapi-container || exit 0'
@@ -24,9 +25,11 @@ pipeline {
             }
         }
 
-        stage('Run Docker Container') {
+        
+        stage('Display Application URL') {
             steps {
-                bat 'docker run -d -p 8082:8000 --name fastapi-container fastapi-ml-app'
+                bat 'echo Application running at http://localhost:8082'
+                bat 'echo Swagger UI at http://localhost:8082/docs'
             }
         }
 
