@@ -25,7 +25,7 @@ pipeline {
 
         stage('Run FastAPI') {
             steps {
-                bat 'start run_fastapi.bat'
+                bat 'start cmd /k "python -m uvicorn app:app --host 127.0.0.1 --port 8091 --reload"'
             }
         }
 
