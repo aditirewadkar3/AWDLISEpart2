@@ -17,23 +17,23 @@ pipeline {
             }
         }
 
-        stage('Train ML Model') {
+        stage('Train Model') {
             steps {
                 bat 'python train_model.py'
             }
         }
 
-        stage('Run FastAPI') {
+        stage('Start FastAPI') {
             steps {
                 bat '''
-                start /B python -m uvicorn app:app --host 127.0.0.1 --port 8091
+                start "" cmd /c "cd /d C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\IrisDataset1 && python -m uvicorn app:app --host 127.0.0.1 --port 8091"
                 '''
             }
         }
 
-        stage('Display URL') {
+        stage('Done') {
             steps {
-                bat 'echo http://127.0.0.1:8091'
+                bat 'echo FastAPI Started on http://127.0.0.1:8091'
             }
         }
     }
